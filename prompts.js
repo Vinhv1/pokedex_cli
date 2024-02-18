@@ -1,6 +1,9 @@
 import inquirer from "inquirer";
 import { theData } from "./save-pokemon.js";
 import { MY_PROMPTS } from "./question.js";
+import { LANGUAGES } from "./language.js";
+
+
 
 async function selectLanguage() {
     const userInput = await inquirer.prompt(MY_PROMPTS.languageSelection);
@@ -49,7 +52,8 @@ const askForAnotherPokemon = async () => {
 const prompts = async () => {
 
     const selectedLanguage = await selectLanguage();
-    console.log(selectedLanguage);
+    const language = LANGUAGES[selectedLanguage] || LANGUAGES.en;
+    console.log(language);
 
     while(true) {
 
