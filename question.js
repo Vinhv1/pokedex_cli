@@ -5,12 +5,14 @@
 //     message: "What pokemon do you want to research?",
 // })
 
+import { LANGUAGES } from "./language.js";
+
 
 export const MY_PROMPTS = {
-    languageSelection: {
+    languageSelectionPrompt: {
         type: "list",
         default: "en",
-        name: "slectedLanguage",
+        name: "selectedLanguage",
         message: "Select a language",
         choices: [
             {
@@ -27,15 +29,20 @@ export const MY_PROMPTS = {
             }
         ]
     },
-    namePrompt: {
-        type: "input",
-        name: "pokemon",
-        message: "What pokemon do you want to research?",
+    namePrompt: (selectedLanguage) => {
+        // console.log("Selected Language:", selectedLanguage);
+        // console.log(LANGUAGES[selectedLanguage])
+        const language = LANGUAGES[selectedLanguage];
+        return {
+            type: "input",
+            name: "pokemon",
+            message: language.enterPokemonName,
+        }
     },
-    infoPrompt:{
+    infoPrompt: (selectedLanguage) => ({
         type: "checkbox",
         name: "info_pokemon",
-        message: "What info do you want to download?",
+        message: LANGUAGES[selectedLanguage].infoPrompt,
         choices: [
             {
                 name: "abilities",
@@ -53,13 +60,13 @@ export const MY_PROMPTS = {
                 name: "official-artwork"
             }         
         ]
-    },
-    anotherPokemonPrompt:{
+    }),
+    anotherPokemonPrompt: (selectedLanguage) => ({
         type: "confirm",
         default: false,
         name: "anotherPokemon",
-        message: "Do you want to research another pokemon?",
-    }
+        message: LANGUAGES[selectedLanguage].askForAnotherPokemon,
+    })
 
 };
 

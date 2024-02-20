@@ -2,23 +2,18 @@ import inquirer from "inquirer";
 import { theData } from "./save-pokemon.js";
 import { MY_PROMPTS } from "./question.js";
 import { LANGUAGES } from "./language.js";
+import { fetchPokemon } from "./fetching-data.js";
 
 
 
-async function selectLanguage() {
-    const userInput = await inquirer.prompt(MY_PROMPTS.languageSelection);
-    return userInput.slectedLanguage;
-
+export async function selectLanguage() {
+    const userInput = await inquirer.prompt(MY_PROMPTS.languageSelectionPrompt);
+    return userInput.selectedLanguage;
 }
 
-async function fetchPokemon(pokemonName) {
-    const reqPokemon = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName.toLowerCase()}`);
-    return await reqPokemon.json();
-}
+export async function askForPokemon (selectedLanguage) {
 
-const askForPokemon = async () => {
-
-    let userInput = await inquirer.prompt(MY_PROMPTS.namePrompt);
+    let userInput = await inquirer.prompt(MY_PROMPTS.namePrompt(selectedLanguage));
     // console.log(userInput, userInput.pokemon, typeof userInput, typeof userInput.pokemon);
     if(typeof userInput !== "object" || typeof userInput.pokemon !== "string" )
     {
@@ -32,7 +27,7 @@ const askForPokemon = async () => {
     return pokemonName;
 }
 
-const askInfoToDownload = async () => {
+export async function askInfoToDownload () {
     const userInput = await inquirer.prompt(MY_PROMPTS.infoPrompt);
     if (!userInput.info_pokemon || userInput.info_pokemon.length === 0) {
         throw new Error("InvalidInfo");
@@ -42,42 +37,74 @@ const askInfoToDownload = async () => {
     return info;
 }
 
-
-const askForAnotherPokemon = async () => {
+export async function askForAnotherPokemon () {
     const userInput = await inquirer.prompt(MY_PROMPTS.anotherPokemonPrompt);
     let anotherPokemon = userInput.anotherPokemon;
     return anotherPokemon;
+
 }
 
-const prompts = async () => {
+// const askForPokemon = async (language) => {
 
-    const selectedLanguage = await selectLanguage();
-    const language = LANGUAGES[selectedLanguage] || LANGUAGES.en;
-    console.log(language);
+//     let userInput = await inquirer.prompt(MY_PROMPTS(language).namePrompt);
+//     // console.log(userInput, userInput.pokemon, typeof userInput, typeof userInput.pokemon);
+//     if(typeof userInput !== "object" || typeof userInput.pokemon !== "string" )
+//     {
+//         throw new Error("InvalidPokemon")
+//     }
+//     const pokemonName = userInput.pokemon;
+//     // userInput = null;
+//     // const pokemonName = userInput?.pokemon ?? "";
 
-    while(true) {
+//     // console.log(pokemonName);
+//     return pokemonName;
+// }
 
-        const pokemonName = await askForPokemon();
-        if(pokemonName === ""){
-            console.log("You must enter a valid pokemon name");
-            continue;
-        }
-        const pokemonJson = await fetchPokemon(pokemonName);
-        // console.log(await pokemonJson);
-        const info = await askInfoToDownload();
-        // console.log(await info);
-        await theData(pokemonJson, info)
-        const anotherPokemon = await askForAnotherPokemon();
-        if(anotherPokemon === false) {
-            break;
-        }
-    }        
-}
+// const askInfoToDownload = async (language) => {
+//     const userInput = await inquirer.prompt(LANGUAGES[language].infoPrompt);
+//     if (!userInput.info_pokemon || userInput.info_pokemon.length === 0) {
+//         throw new Error("InvalidInfo");
+//     }
+//     const info = userInput.info_pokemon;
+//     // console.log(info)
+//     return info;
+// }
 
-prompts();
 
-export default prompts;
-export { fetchPokemon };  
+// const askForAnotherPokemon = async (language) => {
+//     const userInput = await inquirer.prompt(LANGUAGES[language].askForAnotherPokemon);
+//     let anotherPokemon = userInput.anotherPokemon;
+//     return anotherPokemon;
+// }
+
+
+// ---------------------------------------------------------
+// const prompts = async () => {
+//     console.log("Welcome to the Pokemon API");
+//     const selectedLanguage = await selectLanguage();
+//     // const language = LANGUAGES[selectedLanguage] || LANGUAGES.en;
+//     console.log(selectedLanguage);
+
+//     while(true) {
+
+//         const pokemonName = await askForPokemon(selectedLanguage);
+//         if(pokemonName === ""){
+//             console.log("You must enter a valid pokemon name");
+//             continue;
+//         }
+//         const pokemonJson = await fetchPokemon(pokemonName);
+//         // console.log(await pokemonJson);
+//         const info = await askInfoToDownload(selectedLanguage);
+//         // console.log(await info);
+//         await theData(pokemonJson, info)
+//         const anotherPokemon = await askForAnotherPokemon(selectedLanguage);
+//         if(anotherPokemon === false) {
+//             break;
+//         }
+//     }        
+// }
+
+
 
 
 
