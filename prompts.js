@@ -27,8 +27,8 @@ export async function askForPokemon (selectedLanguage) {
     return pokemonName;
 }
 
-export async function askInfoToDownload () {
-    const userInput = await inquirer.prompt(MY_PROMPTS.infoPrompt);
+export async function askInfoToDownload (selectedLanguage) {
+    const userInput = await inquirer.prompt(MY_PROMPTS.infoPrompt(selectedLanguage));
     if (!userInput.info_pokemon || userInput.info_pokemon.length === 0) {
         throw new Error("InvalidInfo");
     }
@@ -37,8 +37,8 @@ export async function askInfoToDownload () {
     return info;
 }
 
-export async function askForAnotherPokemon () {
-    const userInput = await inquirer.prompt(MY_PROMPTS.anotherPokemonPrompt);
+export async function askForAnotherPokemon (selectedLanguage) {
+    const userInput = await inquirer.prompt(MY_PROMPTS.anotherPokemonPrompt(selectedLanguage));
     let anotherPokemon = userInput.anotherPokemon;
     return anotherPokemon;
 

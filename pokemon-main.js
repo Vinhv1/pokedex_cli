@@ -15,9 +15,9 @@ async function start() {
         console.log(pokemonName);
         const pokemoJson = await fetchPokemon(pokemonName);
         // console.log(pokemoJson);
-        const pokemonInfo = await askInfoToDownload();
+        const pokemonInfo = await askInfoToDownload(selectedLanguage);
         // console.log(pokemonInfo);
-        const anotherPokemon = await askForAnotherPokemon();
+        const anotherPokemon = await askForAnotherPokemon(selectedLanguage);
         if(anotherPokemon === false) {
             break;
         }
