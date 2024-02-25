@@ -11,9 +11,10 @@ import { LANGUAGES } from "./language.js";
 export const MY_PROMPTS = {
     languageSelectionPrompt: {
         type: "list",
+        prefix: "🍙",
         default: "en",
         name: "selectedLanguage",
-        message: "Select a language",
+        message: "Select a language!",
         choices: [
             {
                 name: "English",
@@ -32,16 +33,19 @@ export const MY_PROMPTS = {
     namePrompt: (selectedLanguage) => {
         // console.log("Selected Language:", selectedLanguage);
         // console.log(LANGUAGES[selectedLanguage])
-        const language = LANGUAGES[selectedLanguage];
+        // const language = LANGUAGES[selectedLanguage];
         return {
             type: "input",
+            prefix: "🍙",
             name: "pokemon",
-            message: language.enterPokemonName,
+            message: LANGUAGES[selectedLanguage].enterPokemonName,
         }
     },
     infoPrompt: (selectedLanguage) => ({
         type: "checkbox",
+        prefix: "🍙",
         name: "info_pokemon",
+        suffix: " Vinh test",
         message: LANGUAGES[selectedLanguage].infoPrompt,
         choices: [
             {
@@ -63,6 +67,7 @@ export const MY_PROMPTS = {
     }),
     anotherPokemonPrompt: (selectedLanguage) => ({
         type: "confirm",
+        prefix: "🍙",
         default: false,
         name: "anotherPokemon",
         message: LANGUAGES[selectedLanguage].askForAnotherPokemon,

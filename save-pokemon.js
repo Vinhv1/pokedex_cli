@@ -1,5 +1,6 @@
 import fs from "fs/promises"
 import path from "path"
+import { fetchEvolutionChain } from "./fetching-data";
 
 const theData = async (pokeApiJson, selectedOptions) => {
     await createFolder(pokeApiJson.name);
@@ -57,12 +58,13 @@ const saveAbilities = async (abilitiesJson, folderName) => {
 
 
 const saveEvolutionChain = async (pokemonName) => {
-    const reqPokeSpecies = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${pokemonName.toLowerCase()}`);
-    const pokemonSpecies = await reqPokeSpecies.json();
-    const url = pokemonSpecies.evolution_chain.url;
+    // const reqPokeSpecies = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${pokemonName.toLowerCase()}`);
+    // const pokemonSpecies = await reqPokeSpecies.json();
+    // const url = pokemonSpecies.evolution_chain.url;
     // console.log(url)
-    const reqEvolution = await fetch(url);
-    const evolutionChain = await reqEvolution.json();
+    // const reqEvolution = await fetch(url);
+    // const evolutionChain = await reqEvolution.json();
+    const evolutionChain = await fetchEvolutionChain(pokemonName)
     let heading = "This is the evolution chain from base form to final form\n\n"
     let evolutions = evolutionChain.chain.species.name + "\n" + evolutionChain.chain.evolves_to[0].species.name + "\n" + evolutionChain.chain.evolves_to[0].evolves_to[0].species.name;
     let evolution_chain = heading + evolutions;

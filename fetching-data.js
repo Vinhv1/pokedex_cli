@@ -18,4 +18,13 @@ export async function fetchPokemon(pokemonName) {
   
     return await response.json();
   }
-  
+
+
+export async function fetchEvolutionChain(pokemonName) {
+    const reqPokeSpecies = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${pokemonName.toLowerCase()}`);
+    const pokemonSpecies = await reqPokeSpecies.json();
+    const url = pokemonSpecies.evolution_chain.url;
+    const reqEvolution = await fetch(url);
+    const evolutionChain = await reqEvolution.json();
+    return evolutionChain
+}
