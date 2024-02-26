@@ -45,7 +45,6 @@ export const MY_PROMPTS = {
         type: "checkbox",
         prefix: "🍙",
         name: "info_pokemon",
-        suffix: " Vinh test",
         message: LANGUAGES[selectedLanguage].infoPrompt,
         choices: [
             {

@@ -1,6 +1,7 @@
 import fs from "fs/promises"
 import path from "path"
-import { fetchEvolutionChain } from "./fetching-data";
+import { fetchEvolutionChain } from "./fetching-data.js";
+import { type } from "os";
 
 const theData = async (pokeApiJson, selectedOptions) => {
     await createFolder(pokeApiJson.name);
@@ -36,7 +37,6 @@ const createFolder = async (folderName) => {
 }
 
 
-
 const saveAbilities = async (abilitiesJson, folderName) => {
     const filePath = path.join(process.cwd(), folderName, "abilities.txt");
     let ab = ""
@@ -55,15 +55,7 @@ const saveAbilities = async (abilitiesJson, folderName) => {
 }
 
 
-
-
 const saveEvolutionChain = async (pokemonName) => {
-    // const reqPokeSpecies = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${pokemonName.toLowerCase()}`);
-    // const pokemonSpecies = await reqPokeSpecies.json();
-    // const url = pokemonSpecies.evolution_chain.url;
-    // console.log(url)
-    // const reqEvolution = await fetch(url);
-    // const evolutionChain = await reqEvolution.json();
     const evolutionChain = await fetchEvolutionChain(pokemonName)
     let heading = "This is the evolution chain from base form to final form\n\n"
     let evolutions = evolutionChain.chain.species.name + "\n" + evolutionChain.chain.evolves_to[0].species.name + "\n" + evolutionChain.chain.evolves_to[0].evolves_to[0].species.name;
@@ -88,7 +80,12 @@ const saveStats = async (statsJson, folderName) => {
         for (const stat of statsJson)
         {
             stats += stat.stat.name + " : " + stat.base_stat + "\n"
+            console.log(typeof stat.base_stat)
+            console.log("------------")
+            console.log(typeof stats)
         }
+        console.log(typeof stats)
+
         // console.log(stats)
         await fs.writeFile(filePath, stats);
         // console.log(`Stats saved to ${filePath}`);

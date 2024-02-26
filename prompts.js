@@ -1,9 +1,5 @@
 import inquirer from "inquirer";
-import { theData } from "./save-pokemon.js";
 import { MY_PROMPTS } from "./question.js";
-import { LANGUAGES } from "./language.js";
-import { fetchPokemon } from "./fetching-data.js";
-
 
 
 export async function selectLanguage() {
@@ -12,18 +8,12 @@ export async function selectLanguage() {
 }
 
 export async function askForPokemon (selectedLanguage) {
-
     let userInput = await inquirer.prompt(MY_PROMPTS.namePrompt(selectedLanguage));
-    // console.log(userInput, userInput.pokemon, typeof userInput, typeof userInput.pokemon);
     if(typeof userInput !== "object" || typeof userInput.pokemon !== "string" )
     {
         throw new Error("InvalidPokemon")
     }
     const pokemonName = userInput.pokemon;
-    // userInput = null;
-    // const pokemonName = userInput?.pokemon ?? "";
-
-    // console.log(pokemonName);
     return pokemonName;
 }
 
@@ -33,7 +23,6 @@ export async function askInfoToDownload (selectedLanguage) {
         throw new Error("InvalidInfo");
     }
     const info = userInput.info_pokemon;
-    // console.log(info)
     return info;
 }
 

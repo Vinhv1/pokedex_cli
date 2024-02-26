@@ -1,30 +1,31 @@
 
-
-// async function fetchPokemon(pokemonName) {
-//     const reqPokemon = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName.toLowerCase()}`);
-//     return await reqPokemon.json();
-// }
+const BASE_URL = "https://pokeapi.co/api/v2/";
 
 export async function fetchPokemon(pokemonName) {
     if (!pokemonName) {
       throw new Error("InvalidPokemon");
     }
   
-    const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName.toLowerCase()}`);
+    const response = await fetch(`${BASE_URL}pokemon/${pokemonName.toLowerCase()}`);
   
     if (!response.ok) {
       throw new Error(`Failed to fetch Pokemon: ${response.statusText}`);
     }
   
-    return await response.json();
+    return response.json();
   }
 
 
 export async function fetchEvolutionChain(pokemonName) {
-    const reqPokeSpecies = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${pokemonName.toLowerCase()}`);
-    const pokemonSpecies = await reqPokeSpecies.json();
-    const url = pokemonSpecies.evolution_chain.url;
+    const speciesJson = await fetchPokemonSpecies(pokemonName);
+    const url = speciesJson.evolution_chain.url;
     const reqEvolution = await fetch(url);
     const evolutionChain = await reqEvolution.json();
     return evolutionChain
+}
+
+
+async function fetchPokemonSpecies(pokemonName) {
+    const reqPokeSpecies = await fetch(`${BASE_URL}pokemon-species/${pokemonName.toLowerCase()}`);
+    return reqPokeSpecies.json();  
 }
