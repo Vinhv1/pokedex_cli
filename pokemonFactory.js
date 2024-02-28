@@ -11,14 +11,15 @@
 import Pokemon from './pokemonClass.js';
 
 class PokemonFactory {
-    createPokemon(data) {
+    createPokemon(pokemonApiJson, evolutionChainJson) {
+        // console.log(data);
         return new Pokemon(
-            data.name,
-            data.abilities,
-            data.stats,
-            data.sprites,
-            data.evolutionChain,
-            data.artwork
+            pokemonApiJson.name,
+            pokemonApiJson.abilities,
+            pokemonApiJson.stats,
+            pokemonApiJson.sprites,
+            evolutionChainJson.evolutionChain,
+            pokemonApiJson.sprites.other['official-artwork'].front_default,
         );
     }
 }

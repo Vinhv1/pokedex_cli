@@ -29,3 +29,4 @@ async function fetchPokemonSpecies(pokemonName) {
     const reqPokeSpecies = await fetch(`${BASE_URL}pokemon-species/${pokemonName.toLowerCase()}`);
     return reqPokeSpecies.json();  
 }
+
