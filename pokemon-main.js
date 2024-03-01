@@ -21,7 +21,7 @@ async function start() {
         const pokemonJson = await fetchPokemon(pokemonName);
         const evolutionChainJson = await fetchEvolutionChain(pokemonName)
         const pokemon = pokemonFactory.createPokemon(pokemonJson, evolutionChainJson);
-        // console.log(pokemon);
+        console.log(pokemon);
         // console.log(pokemoJson);
         const pokemonInfo = await askInfoToDownload(selectedLanguage);
         // console.log(pokemonInfo);

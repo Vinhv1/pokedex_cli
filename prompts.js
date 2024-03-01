@@ -1,5 +1,6 @@
 import inquirer from "inquirer";
 import { MY_PROMPTS } from "./question.js";
+import { ERROR_MESSAGES } from "./errors.js";
 
 
 export async function selectLanguage() {
@@ -11,7 +12,7 @@ export async function askForPokemon (selectedLanguage) {
     let userInput = await inquirer.prompt(MY_PROMPTS.namePrompt(selectedLanguage));
     if(typeof userInput !== "object" || typeof userInput.pokemon !== "string" )
     {
-        throw new Error("InvalidPokemon")
+        console.log(ERROR_MESSAGES);
     }
     const pokemonName = userInput.pokemon;
     return pokemonName;
