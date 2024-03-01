@@ -1,18 +1,18 @@
 import fs from "fs/promises"
 import path from "path"
 
-export async function theData(pokemon, selectedOptions, evolutionChainJson) {
+export async function theData(pokemon, selectedOptions) {
     if(selectedOptions.includes("abilities")){
         await saveAbilities(pokemon.getAbilities(), pokemon.getName());
     }
     if(selectedOptions.includes("evolution-chain")){
-        await saveEvolutionChain(evolutionChainJson, pokemon.getName());
+        await saveEvolutionChain(pokemon.getEvolutionChain(), pokemon.getName());
     }
     if(selectedOptions.includes("stats")){
         await saveStats(pokemon.getStats(), pokemon.getName());
     }
     if(selectedOptions.includes("official-artwork")){
-        await saveArtWork(pokemon.getSprites(), pokemon.getName());
+        await saveArtWork(await pokemon.getArtwork(), pokemon.getName());
     }
 }
 
@@ -37,30 +37,32 @@ async function saveToFile(data, filename) {
 
     try {
         await fs.writeFile(filePath, jsonData);
-        console.log(`Data saved to ${filePath}`);
     } catch (err) {
         console.error(`Error writing file ${filePath}`, err);
     }
 }
 
-async function saveAbilities(abilities, name) {
-    await saveToFile(abilities, `${name}/abilities.json`);
+async function saveAbilities(abilities, fileName) {
+    await saveToFile(abilities, `${fileName}/abilities.json`);
+    console.log(`Abilities saved to ${fileName}/abilities.json`);
 }
 
-export async function saveStats(stats, name) {
-    await saveToFile(stats, `${name}/stats.json`);
+export async function saveStats(stats, fileName) {
+    await saveToFile(stats, `${fileName}/stats.json`);
+    console.log(`Stats saved to ${fileName}/stats.json`);
 }
 
-export async function saveArtWork(artwork, name) {
-    await saveToFile(artwork, `${name}/artwork.json`);
+export async function saveArtWork(artwork, fileName) {
+    const filePath = path.join(process.cwd(), `${fileName}/artwork.png`);
+    await fs.writeFile(filePath, Buffer.from(artwork));
+    console.log(`Artwork saved to ${filePath}`);
+
 }
 
-export async function saveEvolutionChain(evolutionChain, name) {
-    await saveToFile(evolutionChain, `${name}/evolutionChain.json`);
+export async function saveEvolutionChain(evolutionChain, fileName) {
+    await saveToFile(evolutionChain, `${fileName}/evolutionChain.json`);
+    console.log(`Evolution chain saved to ${fileName}/evolutionChain.json`);
 }
-
-
-
 
 
 
@@ -163,6 +165,7 @@ export async function saveEvolutionChain(evolutionChain, name) {
 //     const artWork = await reqArtWork.arrayBuffer();
 //     await fs.writeFile(filePath, Buffer.from(artWork));
 // }
+
 
 
 // const saveSprites = async (spritesJson, folderName) => {

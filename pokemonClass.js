@@ -1,10 +1,12 @@
+import { fetchArtwork, fetchEvolutionChain } from "./fetching-data.js";
+
 class Pokemon {
     constructor(name, abilities, stats, sprites, evolutionChain, artwork) {
         this.name = name;
         this.abilities = abilities;
         this.stats = stats;
         this.sprites = sprites;
-        // this.evolutionChain = evolutionChain;
+        this.evolutionChain = evolutionChain;
         this.artwork = artwork;
     }
     getName() {
@@ -12,23 +14,32 @@ class Pokemon {
     }
 
     getAbilities() {
-        return this.abilities;
+        return this.abilities.map(ability => ability.ability.name);
     }
 
     getStats() {
-        return this.stats;
+        const statsObject = {};
+        for (const stat of this.stats) {
+            statsObject[stat.stat.name] = stat.base_stat;
+        }
+        return statsObject;
     }
 
-    getSprites() {
-        return this.sprites;
+    getEvolutionChain() {
+        const evolutionChainArray = [];
+        let currentStage = this.evolutionChain.chain;
+        while (currentStage !== undefined && currentStage !== null) {
+            evolutionChainArray.push(currentStage.species.name);
+            // console.log(currentStage);
+            currentStage = currentStage.evolves_to[0];
+        }
+        return evolutionChainArray;
+
     }
 
-    // getEvolutionChain() {
-    //     return this.evolutionChain;
-    // }
-
-    getArtwork() {
-        return this.artwork;
+    async getArtwork() {
+        const artworkResponse = await fetchArtwork(this.name);
+        return artworkResponse;
     }
 
 }

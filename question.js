@@ -57,9 +57,6 @@ export const MY_PROMPTS = {
                 name: "stats",
             },
             {
-                name: "sprites",
-            },
-            {
                 name: "official-artwork"
             }         
         ]

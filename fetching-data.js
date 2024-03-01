@@ -15,6 +15,13 @@ export async function fetchPokemon(pokemonName) {
     return response.json();
   }
 
+export async function fetchArtwork(pokemonName) {
+    const pokemonJson = await fetchPokemon(pokemonName);
+    const artworkUrl = pokemonJson.sprites.other['official-artwork'].front_default;
+    const reqArtwork = await fetch(artworkUrl);
+    const artwork = await reqArtwork.arrayBuffer();
+    return artwork;
+}
 
 export async function fetchEvolutionChain(pokemonName) {
     const speciesJson = await fetchPokemonSpecies(pokemonName);
@@ -30,3 +37,4 @@ async function fetchPokemonSpecies(pokemonName) {
     return reqPokeSpecies.json();  
 }
 
+fetchArtwork("pikachu");
