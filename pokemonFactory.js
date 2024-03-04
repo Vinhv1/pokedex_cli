@@ -17,7 +17,6 @@ class PokemonFactory {
             pokemonApiJson.name,
             pokemonApiJson.abilities,
             pokemonApiJson.stats,
-            pokemonApiJson.sprites,
             evolutionChainJson,
             pokemonApiJson.sprites.other['official-artwork'].front_default,
         );

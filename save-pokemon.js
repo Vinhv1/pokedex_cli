@@ -56,7 +56,6 @@ export async function saveArtWork(artwork, fileName) {
     const filePath = path.join(process.cwd(), `${fileName}/artwork.png`);
     await fs.writeFile(filePath, Buffer.from(artwork));
     console.log(`Artwork saved to ${filePath}`);
-
 }
 
 export async function saveEvolutionChain(evolutionChain, fileName) {

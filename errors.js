@@ -1,5 +1,7 @@
-export const ERROR_MESSAGES = new Set();
+import intlSingleton  from "./intl/index.js";
 
-ERROR_MESSAGES.add('Error: First error');
-ERROR_MESSAGES.add('Error: Second error');
-ERROR_MESSAGES.add('Error: Third error');
+export const ERROR_MESSAGES = new Map();
+
+ERROR_MESSAGES.set("INVALID_POKEMON", () => 
+    intlSingleton.getMessage("INVALID_POKEMON")
+);

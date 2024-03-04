@@ -1,36 +1,34 @@
-import { fetchArtwork, fetchEvolutionChain } from "./fetching-data.js";
+import { fetchArtwork } from "./fetching-data.js";
 
 class Pokemon {
-    constructor(name, abilities, stats, sprites, evolutionChain, artwork) {
+    constructor(name, abilities, stats, evolutionChain, artwork) {
         this.name = name;
-        this.abilities = abilities;
-        this.stats = stats;
-        this.sprites = sprites;
-        this.evolutionChain = evolutionChain;
+        this.abilities = this.getAbilities(abilities);
+        this.stats = this.getStats(stats);
+        this.evolutionChain = this.getEvolutionChain(evolutionChain);
         this.artwork = artwork;
     }
     getName() {
         return this.name;
     }
 
-    getAbilities() {
-        return this.abilities.map(ability => ability.ability.name);
+    getAbilities(abilities) {
+        return abilities.map(ability => ability.ability.name);
     }
 
-    getStats() {
+    getStats(stats) {
         const statsObject = {};
-        for (const stat of this.stats) {
+        for (const stat of stats) {
             statsObject[stat.stat.name] = stat.base_stat;
         }
         return statsObject;
     }
 
-    getEvolutionChain() {
+    getEvolutionChain(evolutionChain) {
         const evolutionChainArray = [];
-        let currentStage = this.evolutionChain.chain;
+        let currentStage = evolutionChain.chain;
         while (currentStage !== undefined && currentStage !== null) {
             evolutionChainArray.push(currentStage.species.name);
-            // console.log(currentStage);
             currentStage = currentStage.evolves_to[0];
         }
         return evolutionChainArray;

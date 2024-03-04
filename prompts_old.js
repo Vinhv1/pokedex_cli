@@ -1,25 +1,26 @@
 import inquirer from "inquirer";
 import { MY_PROMPTS } from "./question.js";
 import { ERROR_MESSAGES } from "./errors.js";
+import intlSingleton from './intl/index.js';
 
 
-export async function selectLanguage() {
-    const userInput = await inquirer.prompt(MY_PROMPTS.languageSelectionPrompt);
-    return userInput.selectedLanguage;
-}
+// export async function selectLanguage() {
+//     const userInput = await inquirer.prompt(MY_PROMPTS.languageSelectionPrompt);
+//     return userInput.selectedLanguage;
+// }
 
-export async function askForPokemon (selectedLanguage) {
-    let userInput = await inquirer.prompt(MY_PROMPTS.namePrompt(selectedLanguage));
+export async function askForPokemon () {
+    let userInput = await inquirer.prompt(MY_PROMPTS.namePrompt(intlSingleton.getLanguage()));
     if(typeof userInput !== "object" || typeof userInput.pokemon !== "string" )
     {
-        console.log(ERROR_MESSAGES);
+        console.log();
     }
     const pokemonName = userInput.pokemon;
     return pokemonName;
 }
 
-export async function askInfoToDownload (selectedLanguage) {
-    const userInput = await inquirer.prompt(MY_PROMPTS.infoPrompt(selectedLanguage));
+export async function askInfoToDownload () {
+    const userInput = await inquirer.prompt(MY_PROMPTS.infoPrompt(intlSingleton.getLanguage()));
     if (!userInput.info_pokemon || userInput.info_pokemon.length === 0) {
         throw new Error("InvalidInfo");
     }
@@ -27,8 +28,8 @@ export async function askInfoToDownload (selectedLanguage) {
     return info;
 }
 
-export async function askForAnotherPokemon (selectedLanguage) {
-    const userInput = await inquirer.prompt(MY_PROMPTS.anotherPokemonPrompt(selectedLanguage));
+export async function askForAnotherPokemon () {
+    const userInput = await inquirer.prompt(MY_PROMPTS.anotherPokemonPrompt(intlSingleton.getLanguage()));
     let anotherPokemon = userInput.anotherPokemon;
     return anotherPokemon;
 

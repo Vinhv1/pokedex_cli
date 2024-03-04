@@ -5,7 +5,7 @@
 //     message: "What pokemon do you want to research?",
 // })
 
-import { LANGUAGES } from "./language.js";
+import { LANGUAGES } from "./intl/language.js";
 
 
 export const MY_PROMPTS = {
