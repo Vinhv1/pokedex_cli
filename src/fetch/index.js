@@ -1,15 +1,13 @@
+import { ERROR_MESSAGES } from "../errors/index.js";
+
 
 const BASE_URL = "https://pokeapi.co/api/v2/";
 
 export async function fetchPokemon(pokemonName) {
-    if (!pokemonName) {
-      throw new Error("InvalidPokemon");
-    }
-  
     const response = await fetch(`${BASE_URL}pokemon/${pokemonName.toLowerCase()}`);
   
     if (!response.ok) {
-      throw new Error(`Failed to fetch Pokemon: ${response.statusText}`);
+      console.error(ERROR_MESSAGES.get("INVALID_POKEMON")());
     }
   
     return response.json();
@@ -36,5 +34,3 @@ async function fetchPokemonSpecies(pokemonName) {
     const reqPokeSpecies = await fetch(`${BASE_URL}pokemon-species/${pokemonName.toLowerCase()}`);
     return reqPokeSpecies.json();  
 }
-
-fetchArtwork("pikachu");

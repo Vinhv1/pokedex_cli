@@ -1,9 +1,9 @@
-import { askForPokemon, askInfoToDownload, askForAnotherPokemon } from "./prompts_old.js";
-import { fetchPokemon, fetchEvolutionChain } from "./fetching-data.js"; 
-import { theData, createFolder } from "./save-pokemon.js";
-import pokemonFactory from './pokemonFactory.js';
-import { selectLanguage }  from "./prompts/index.js";
-import intlSingleton from './intl/index.js';
+import { askForPokemon, askInfoToDownload, askForAnotherPokemon } from "./src/prompts/index.js";
+import { fetchPokemon, fetchEvolutionChain } from "./src/fetch/index.js"; 
+import { theData, createFolder } from "./src/save/index.js";
+import pokemonFactory from "./src/pokemon/pokemonFactory.js";
+import { selectLanguage }  from "./src/prompts/index.js";
+import intlSingleton from './src/intl/index.js';
 
 // copilot chat - continua implementarea, e bine foloseste-l
 // copilot sa il intreb cum facem cu erorile si sa refacem language selection feature
@@ -24,7 +24,7 @@ async function start() {
         const pokemonJson = await fetchPokemon(pokemonName);
         const evolutionChainJson = await fetchEvolutionChain(pokemonName)
         const pokemon = pokemonFactory.createPokemon(pokemonJson, evolutionChainJson);
-        console.log(pokemon);
+        // console.log(pokemon);
         // console.log(pokemoJson);
         const pokemonInfo = await askInfoToDownload();
         // console.log(pokemonInfo);

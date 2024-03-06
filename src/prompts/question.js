@@ -5,7 +5,8 @@
 //     message: "What pokemon do you want to research?",
 // })
 
-import { LANGUAGES } from "./intl/language.js";
+import { LANGUAGES } from "../intl/language.js";
+import IntlSingleton from "../intl/index.js";
 
 
 export const MY_PROMPTS = {
@@ -48,16 +49,16 @@ export const MY_PROMPTS = {
         message: LANGUAGES[selectedLanguage].infoPrompt,
         choices: [
             {
-                name: "abilities",
+                name: IntlSingleton.translate("abilities"),
             },
             {
-                name: "evolution-chain",
+                name: IntlSingleton.translate("evolution-chain"),
             },
             {
-                name: "stats",
+                name: IntlSingleton.translate("stats"),
             },
             {
-                name: "official-artwork"
+                name: IntlSingleton.translate("official-artwork")
             }         
         ]
     }),

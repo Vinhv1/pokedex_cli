@@ -1,4 +1,4 @@
-import intlSingleton  from "./intl/index.js";
+import intlSingleton  from "../intl/index.js";
 
 export const ERROR_MESSAGES = new Map();
 

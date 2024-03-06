@@ -1,5 +1,5 @@
 import inquirer from "inquirer";
-import { MY_PROMPTS } from "../question.js";
+import { MY_PROMPTS } from "../prompts/question.js";
 
 
 export async function selectLanguage() {

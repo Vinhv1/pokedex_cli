@@ -1,4 +1,4 @@
-import { fetchArtwork } from "./fetching-data.js";
+import { fetchArtwork } from "../fetch/index.js";
 
 class Pokemon {
     constructor(name, abilities, stats, evolutionChain, artwork) {
