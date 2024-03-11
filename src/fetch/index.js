@@ -1,36 +1,49 @@
 import { ERROR_MESSAGES } from "../errors/index.js";
+import { getMyPokemonSpecies } from "../pokemon/apiWrapperUtils.js";
 
 
-const BASE_URL = "https://pokeapi.co/api/v2/";
+export const BASE_URL = "https://pokeapi.co/api/v2/";
 
-export async function fetchPokemon(pokemonName) {
-    const response = await fetch(`${BASE_URL}pokemon/${pokemonName.toLowerCase()}`);
-  
+// TEMA 1: abstractizarea conceptelor de pokemon din fisierul asta
+
+// fetchEntity(fromUrl, entityName)
+export async function fetchEntity(fromUrl, entityName) {
+    const response = await fetch(`${fromUrl}/${entityName}`);
     if (!response.ok) {
-      console.error(ERROR_MESSAGES.get("INVALID_POKEMON")());
+      throw new Error("Failed to fetch pokemon");
     }
   
     return response.json();
   }
 
-export async function fetchArtwork(pokemonName) {
-    const pokemonJson = await fetchPokemon(pokemonName);
-    const artworkUrl = pokemonJson.sprites.other['official-artwork'].front_default;
+export async function fetchArtwork(artworkUrl) {
     const reqArtwork = await fetch(artworkUrl);
     const artwork = await reqArtwork.arrayBuffer();
-    return artwork;
+    const officialArt = Buffer.from(artwork);
+    return officialArt;
 }
 
-export async function fetchEvolutionChain(pokemonName) {
-    const speciesJson = await fetchPokemonSpecies(pokemonName);
-    const url = speciesJson.evolution_chain.url;
+
+export async function fetchEvolutionChain(url) {
     const reqEvolution = await fetch(url);
     const evolutionChain = await reqEvolution.json();
     return evolutionChain
 }
 
+// aici
 
-async function fetchPokemonSpecies(pokemonName) {
-    const reqPokeSpecies = await fetch(`${BASE_URL}pokemon-species/${pokemonName.toLowerCase()}`);
-    return reqPokeSpecies.json();  
+export async function fetchEvolutionHelper(pokemonName) {
+  const pokeSpeciesJson = await getMyPokemonSpecies(pokemonName);
+  return pokeSpeciesJson.evolution_chain.url;
 }
+
+// export async function fetchEvolutionHelper(pokemonName) {
+//     const reqPokeSpecies = await fetch(`${BASE_URL}pokemon-species/${pokemonName.toLowerCase()}`);
+//     const pokeSpeciesJson = await reqPokeSpecies.json();
+//     return pokeSpeciesJson.evolution_chain.url;
+// }
+
+// async function fetchPokemonSpecies(pokemonName) {
+//     const reqPokeSpecies = await fetch(`${BASE_URL}pokemon-species/${pokemonName.toLowerCase()}`);
+//     return reqPokeSpecies.json();  
+// }

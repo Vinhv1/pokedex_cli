@@ -10,6 +10,8 @@ import pokemonFactory from "./src/pokemon/pokemonFactory.js";
 import { selectLanguage } from "./src/prompts/index.js";
 import INTL_SINGLETON from "./src/intl/index.js";
 
+// copilot chat - continua implementarea, e bine foloseste-l
+// copilot sa il intreb cum facem cu erorile si sa refacem language selection feature
 
 console.log("================ Welcome to the POKEMON DEX CLI ================");
 
@@ -24,17 +26,16 @@ async function start() {
     try {
 
       const pokemonName = await askForPokemon();
-      const pokemonJson = await getMyPokemon(pokemonName);
-      // console.log(pokemonName);
-      const evolutionUrl = await fetchEvolutionHelper(pokemonName);
-      const evolutionChainJson = await fetchEvolutionChain(evolutionUrl);
-      const pokemon = pokemonFactory.createPokemon(pokemonJson, evolutionChainJson);
-      console.log(pokemon);
+      const pokemon = pokemonFactory.createPokemon(pokemonName);
+      await pokemon.populatePokemon();
+
       // console.log(pokemoJson);
       const pokemonInfo = await askInfoToDownload();
+
       // console.log(pokemonInfo);
-      await createFolder(pokemon.getName());
-      await saveData(pokemonName, pokemon, pokemonInfo);
+      await createFolder(pokemonName);
+      await pokemon.serializePokemon();
+      
     } catch (error) {
       if (error.message === "Failed to fetch pokemon") {
         console.error(INTL_SINGLETON.translate("INVALID_POKEMON"));
@@ -54,11 +55,6 @@ async function start() {
 }
 
 start();
-
-
-// doar name parameter in class, hardening the code,
-
-
 
 // vezi in singleton translate and getMessage - au cam aceeasi functie combina-le
 

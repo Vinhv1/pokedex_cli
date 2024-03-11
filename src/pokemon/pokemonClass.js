@@ -36,9 +36,32 @@ class Pokemon {
     }
 
     async getArtwork() {
-        const artworkResponse = await fetchArtwork(this.name);
+        const artworkResponse = await fetchArtwork(this.artwork);
         return artworkResponse;
     }
+
+    async populatePokemon() {
+        const pokemonJson = await getMyPokemon(pokemonName);
+      // console.log(pokemonName);
+        const evolutionUrl = await fetchEvolutionHelper(pokemonName);
+        const evolutionChainJson = await fetchEvolutionChain(evolutionUrl);
+    }
+
+    // async serializePokemon() {
+    //     if(selectedOptions.includes(intlSingleton.translate("abilities"))){
+    //         await saveToFile(this.abilities, `${this.name}/${intlSingleton.translate("abilities")}.json`);
+    //     }
+    //     if(selectedOptions.includes(intlSingleton.translate("evolution-chain"))){
+    //         await saveToFile(this.evolutionChain, `${pokemonName}/${intlSingleton.translate("evolution-chain")}.json`);
+    //     }
+    //     if(selectedOptions.includes(intlSingleton.translate("stats"))){
+    //         await saveToFile(pokemon.stats, `${pokemonName}/${intlSingleton.translate("stats")}.json`);
+    //     }
+    //     if(selectedOptions.includes(intlSingleton.translate("official-artwork"))){
+    //         const artwork = await pokemon.getArtwork();
+    //         await saveImage(artwork, `${pokemonName}/${intlSingleton.translate("official-artwork")}.png`);
+    //     }
+    // }
 
 }
 

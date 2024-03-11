@@ -1,18 +1,22 @@
 import fs from "fs/promises"
 import path from "path"
+import intlSingleton from "../intl/index.js"
 
-export async function theData(pokemon, selectedOptions) {
-    if(selectedOptions.includes("abilities")){
-        await saveAbilities(pokemon.getAbilities(), pokemon.getName());
+
+export async function saveData(pokemonName, pokemon, selectedOptions) {
+    console.log("here", pokemon)
+    if(selectedOptions.includes(intlSingleton.translate("abilities"))){
+        await saveToFile(pokemon.abilities, `${pokemonName}/${intlSingleton.translate("abilities")}.json`);
     }
-    if(selectedOptions.includes("evolution-chain")){
-        await saveEvolutionChain(pokemon.getEvolutionChain(), pokemon.getName());
+    if(selectedOptions.includes(intlSingleton.translate("evolution-chain"))){
+        await saveToFile(pokemon.evolutionChain, `${pokemonName}/${intlSingleton.translate("evolution-chain")}.json`);
     }
-    if(selectedOptions.includes("stats")){
-        await saveStats(pokemon.getStats(), pokemon.getName());
+    if(selectedOptions.includes(intlSingleton.translate("stats"))){
+        await saveToFile(pokemon.stats, `${pokemonName}/${intlSingleton.translate("stats")}.json`);
     }
-    if(selectedOptions.includes("official-artwork")){
-        await saveArtWork(await pokemon.getArtwork(), pokemon.getName());
+    if(selectedOptions.includes(intlSingleton.translate("official-artwork"))){
+        const artwork = await pokemon.getArtwork();
+        await saveImage(artwork, `${pokemonName}/${intlSingleton.translate("official-artwork")}.png`);
     }
 }
 
@@ -42,26 +46,38 @@ async function saveToFile(data, filename) {
     }
 }
 
-async function saveAbilities(abilities, fileName) {
-    await saveToFile(abilities, `${fileName}/abilities.json`);
-    console.log(`Abilities saved to ${fileName}/abilities.json`);
+
+async function saveImage(imageData, filename) {
+    const filePath = path.join(process.cwd(), filename);
+
+    try {
+        await fs.writeFile(filePath, imageData);
+    } catch (err) {
+        console.error(`Error writing file ${filePath}`, err);
+    }
 }
 
-export async function saveStats(stats, fileName) {
-    await saveToFile(stats, `${fileName}/stats.json`);
-    console.log(`Stats saved to ${fileName}/stats.json`);
-}
 
-export async function saveArtWork(artwork, fileName) {
-    const filePath = path.join(process.cwd(), `${fileName}/artwork.png`);
-    await fs.writeFile(filePath, Buffer.from(artwork));
-    console.log(`Artwork saved to ${filePath}`);
-}
+// async function saveAbilities(abilities, fileName) {
+//     await saveToFile(abilities, `${fileName}/abilities.json`);
+//     console.log(`Abilities saved to ${fileName}/abilities.json`);
+// }
 
-export async function saveEvolutionChain(evolutionChain, fileName) {
-    await saveToFile(evolutionChain, `${fileName}/evolutionChain.json`);
-    console.log(`Evolution chain saved to ${fileName}/evolutionChain.json`);
-}
+// export async function saveStats(stats, fileName) {
+//     await saveToFile(stats, `${fileName}/stats.json`);
+//     console.log(`Stats saved to ${fileName}/stats.json`);
+// }
+
+// export async function saveArtWork(artwork, fileName) {
+//     const filePath = path.join(process.cwd(), `${fileName}/artwork.png`);
+//     await fs.writeFile(filePath, Buffer.from(artwork));
+//     console.log(`Artwork saved to ${filePath}`);
+// }
+
+// export async function saveEvolutionChain(evolutionChain, fileName) {
+//     await saveToFile(evolutionChain, `${fileName}/evolutionChain.json`);
+//     console.log(`Evolution chain saved to ${fileName}/evolutionChain.json`);
+// }
 
 
 
