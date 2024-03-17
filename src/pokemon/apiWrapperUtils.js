@@ -1,4 +1,4 @@
-import { fetchEntity } from "../fetch/index.js";
+import { fetchEntity, fetchEvolutionHelper } from "../fetch/index.js";
 
 export const BASE_URL = "https://pokeapi.co/api/v2";
 
@@ -8,5 +8,6 @@ export const getMyPokemon = (pokemonName) => {
 }
 
 export const getMyPokemonSpecies = (pokemonName) => {
-    return fetchEntity(`${BASE_URL}/pokemon-species`, pokemonName.toLowerCase());
+    console.log("Trec pe aici 2")
+    return fetchEvolutionHelper(`${BASE_URL}/pokemon-species`, pokemonName.toLowerCase());
 }

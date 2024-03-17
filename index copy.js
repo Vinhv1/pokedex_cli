@@ -1,6 +1,6 @@
 import { askForPokemon, askInfoToDownload, askForAnotherPokemon } from "./src/prompts/index.js";
 import { fetchEvolutionChain, fetchEvolutionHelper } from "./src/fetch/index.js";
-import { saveData, createFolder } from "./src/save/index.js";
+import { createFolder } from "./src/save/index.js";
 
 //Imports for pokemons
 import { getMyPokemon } from "./src/pokemon/apiWrapperUtils.js";
@@ -34,7 +34,7 @@ async function start() {
 
       // console.log(pokemonInfo);
       await createFolder(pokemonName);
-      await pokemon.serializePokemon();
+      await pokemon.serializePokemon(pokemonInfo);
       
     } catch (error) {
       if (error.message === "Failed to fetch pokemon") {

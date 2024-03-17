@@ -3,22 +3,22 @@ import path from "path"
 import intlSingleton from "../intl/index.js"
 
 
-export async function saveData(pokemonName, pokemon, selectedOptions) {
-    console.log("here", pokemon)
-    if(selectedOptions.includes(intlSingleton.translate("abilities"))){
-        await saveToFile(pokemon.abilities, `${pokemonName}/${intlSingleton.translate("abilities")}.json`);
-    }
-    if(selectedOptions.includes(intlSingleton.translate("evolution-chain"))){
-        await saveToFile(pokemon.evolutionChain, `${pokemonName}/${intlSingleton.translate("evolution-chain")}.json`);
-    }
-    if(selectedOptions.includes(intlSingleton.translate("stats"))){
-        await saveToFile(pokemon.stats, `${pokemonName}/${intlSingleton.translate("stats")}.json`);
-    }
-    if(selectedOptions.includes(intlSingleton.translate("official-artwork"))){
-        const artwork = await pokemon.getArtwork();
-        await saveImage(artwork, `${pokemonName}/${intlSingleton.translate("official-artwork")}.png`);
-    }
-}
+// export async function saveData(pokemonName, pokemon, selectedOptions) {
+//     console.log("here", pokemon)
+//     if(selectedOptions.includes(intlSingleton.translate("abilities"))){
+//         await saveToFile(pokemon.abilities, `${pokemonName}/${intlSingleton.translate("abilities")}.json`);
+//     }
+//     if(selectedOptions.includes(intlSingleton.translate("evolution-chain"))){
+//         await saveToFile(pokemon.evolutionChain, `${pokemonName}/${intlSingleton.translate("evolution-chain")}.json`);
+//     }
+//     if(selectedOptions.includes(intlSingleton.translate("stats"))){
+//         await saveToFile(pokemon.stats, `${pokemonName}/${intlSingleton.translate("stats")}.json`);
+//     }
+//     if(selectedOptions.includes(intlSingleton.translate("official-artwork"))){
+//         const artwork = await pokemon.getArtwork();
+//         await saveImage(artwork, `${pokemonName}/${intlSingleton.translate("official-artwork")}.png`);
+//     }
+// }
 
 export async function createFolder(name) {
     const folderName = path.join(process.cwd(), name);
@@ -35,7 +35,7 @@ export async function createFolder(name) {
     }
 }
 
-async function saveToFile(data, filename) {
+export async function saveToFile(data, filename) {
     const filePath = path.join(process.cwd(), filename);
     const jsonData = JSON.stringify(data, null, 2);
 
@@ -47,7 +47,7 @@ async function saveToFile(data, filename) {
 }
 
 
-async function saveImage(imageData, filename) {
+export async function saveImage(imageData, filename) {
     const filePath = path.join(process.cwd(), filename);
 
     try {

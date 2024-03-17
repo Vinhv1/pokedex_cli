@@ -1,70 +1,139 @@
-import { fetchArtwork } from "../fetch/index.js";
+// import { fetchArtwork } from "../fetch/index.js";
+
+// class Pokemon {
+//     constructor(name, abilities, stats, evolutionChain, artwork) {
+//         this.name = name;
+//         this.abilities = this.getAbilities(abilities);
+//         this.stats = this.getStats(stats);
+//         this.evolutionChain = this.getEvolutionChain(evolutionChain);
+//         this.artwork = artwork;
+//     }
+//     getName() {
+//         return this.name;
+//     }
+
+//     getAbilities(abilities) {
+//         return abilities.map(ability => ability.ability.name);
+//     }
+
+//     getStats(stats) {
+//         const statsObject = {};
+//         for (const stat of stats) {
+//             statsObject[stat.stat.name] = stat.base_stat;
+//         }
+//         return statsObject;
+//     }
+
+//     getEvolutionChain(evolutionChain) {
+//         const evolutionChainArray = [];
+//         let currentStage = evolutionChain.chain;
+//         while (currentStage !== undefined && currentStage !== null) {
+//             evolutionChainArray.push(currentStage.species.name);
+//             currentStage = currentStage.evolves_to[0];
+//         }
+//         return evolutionChainArray;
+
+//     }
+
+//     async getArtwork() {
+//         const artworkResponse = await fetchArtwork(this.artwork);
+//         return artworkResponse;
+//     }
+
+//     async populatePokemon() {
+//         const pokemonJson = await getMyPokemon(pokemonName);
+//       // console.log(pokemonName);
+//         const evolutionUrl = await fetchEvolutionHelper(pokemonName);
+//         const evolutionChainJson = await fetchEvolutionChain(evolutionUrl);
+//     }
+
+//     async serializePokemon() {
+//         if(selectedOptions.includes(intlSingleton.translate("abilities"))){
+//             await saveToFile(this.abilities, `${this.name}/${intlSingleton.translate("abilities")}.json`);
+//         }
+//         if(selectedOptions.includes(intlSingleton.translate("evolution-chain"))){
+//             await saveToFile(this.evolutionChain, `${pokemonName}/${intlSingleton.translate("evolution-chain")}.json`);
+//         }
+//         if(selectedOptions.includes(intlSingleton.translate("stats"))){
+//             await saveToFile(this.stats, `${pokemonName}/${intlSingleton.translate("stats")}.json`);
+//         }
+//         if(selectedOptions.includes(intlSingleton.translate("official-artwork"))){
+//             const artwork = await pokemon.getArtwork();
+//             await saveImage(artwork, `${pokemonName}/${intlSingleton.translate("official-artwork")}.png`);
+//         }
+//     }
+
+// }
+
+
+// export default Pokemon;
+
+
+
+
+
+
+import { fetchArtwork, fetchEvolutionHelper, fetchEvolutionChain } from "../fetch/index.js";
+import { saveToFile, saveImage } from "../save/index.js";
+import intlSingleton from "../intl/index.js";
+import { getMyPokemon, getMyPokemonSpecies } from "./apiWrapperUtils.js";
 
 class Pokemon {
-    constructor(name, abilities, stats, evolutionChain, artwork) {
+    constructor(name) {
         this.name = name;
-        this.abilities = this.getAbilities(abilities);
-        this.stats = this.getStats(stats);
-        this.evolutionChain = this.getEvolutionChain(evolutionChain);
-        this.artwork = artwork;
-    }
-    getName() {
-        return this.name;
     }
 
-    getAbilities(abilities) {
-        return abilities.map(ability => ability.ability.name);
+    setAbilities(abilities) {
+        this.abilities = abilities.map(ability => ability.ability.name);
     }
 
-    getStats(stats) {
-        const statsObject = {};
-        for (const stat of stats) {
+    setStats(stats) {
+        this.stats = stats.reduce((statsObject, stat) => {
             statsObject[stat.stat.name] = stat.base_stat;
-        }
-        return statsObject;
+            return statsObject;
+        }, {});
     }
 
-    getEvolutionChain(evolutionChain) {
+    setEvolutionChain(evolutionChain) {
         const evolutionChainArray = [];
         let currentStage = evolutionChain.chain;
-        while (currentStage !== undefined && currentStage !== null) {
+        while (currentStage) {
             evolutionChainArray.push(currentStage.species.name);
             currentStage = currentStage.evolves_to[0];
         }
-        return evolutionChainArray;
-
+        this.evolutionChain = evolutionChainArray;
     }
 
-    async getArtwork() {
-        const artworkResponse = await fetchArtwork(this.artwork);
-        return artworkResponse;
+    async setArtwork(artworkUrl) {
+        this.artwork = await fetchArtwork(artworkUrl);
     }
 
     async populatePokemon() {
-        const pokemonJson = await getMyPokemon(pokemonName);
-      // console.log(pokemonName);
-        const evolutionUrl = await fetchEvolutionHelper(pokemonName);
+        const pokemonJson = await getMyPokemon(this.name);
+        this.setAbilities(pokemonJson.abilities);
+        this.setStats(pokemonJson.stats);
+        const evolutionUrl = await getMyPokemonSpecies(this.name);
         const evolutionChainJson = await fetchEvolutionChain(evolutionUrl);
+        this.setEvolutionChain(evolutionChainJson);
+        await this.setArtwork(pokemonJson.sprites.other['official-artwork'].front_default);
     }
 
-    // async serializePokemon() {
-    //     if(selectedOptions.includes(intlSingleton.translate("abilities"))){
-    //         await saveToFile(this.abilities, `${this.name}/${intlSingleton.translate("abilities")}.json`);
-    //     }
-    //     if(selectedOptions.includes(intlSingleton.translate("evolution-chain"))){
-    //         await saveToFile(this.evolutionChain, `${pokemonName}/${intlSingleton.translate("evolution-chain")}.json`);
-    //     }
-    //     if(selectedOptions.includes(intlSingleton.translate("stats"))){
-    //         await saveToFile(pokemon.stats, `${pokemonName}/${intlSingleton.translate("stats")}.json`);
-    //     }
-    //     if(selectedOptions.includes(intlSingleton.translate("official-artwork"))){
-    //         const artwork = await pokemon.getArtwork();
-    //         await saveImage(artwork, `${pokemonName}/${intlSingleton.translate("official-artwork")}.png`);
-    //     }
-    // }
-
+    async serializePokemon(selectedOptions) {
+        console.log(selectedOptions);
+        if(selectedOptions.includes(intlSingleton.translate("abilities"))){
+            await saveToFile(this.abilities, `${this.name}/${intlSingleton.translate("abilities")}.json`);
+        }
+        if(selectedOptions.includes(intlSingleton.translate("evolution-chain"))){
+            await saveToFile(this.evolutionChain, `${this.name}/${intlSingleton.translate("evolution-chain")}.json`);
+        }
+        if(selectedOptions.includes(intlSingleton.translate("stats"))){
+            await saveToFile(this.stats, `${this.name}/${intlSingleton.translate("stats")}.json`);
+        }
+        if(selectedOptions.includes(intlSingleton.translate("official-artwork"))){
+            await saveImage(this.artwork, `${this.name}/${intlSingleton.translate("official-artwork")}.png`);
+        }
+    }
 }
-
 
 export default Pokemon;
 

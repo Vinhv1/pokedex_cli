@@ -10,16 +10,22 @@
 
 import Pokemon from './pokemonClass.js';
 
+// class PokemonFactory {
+//     createPokemon(pokemonApiJson, evolutionChainJson) {
+//         // console.log(data);
+//         return new Pokemon(
+//             pokemonApiJson.name,
+//             pokemonApiJson.abilities,
+//             pokemonApiJson.stats,
+//             evolutionChainJson,
+//             pokemonApiJson.sprites.other['official-artwork'].front_default,
+//         );
+//     }
+// }
+
 class PokemonFactory {
-    createPokemon(pokemonApiJson, evolutionChainJson) {
-        // console.log(data);
-        return new Pokemon(
-            pokemonApiJson.name,
-            pokemonApiJson.abilities,
-            pokemonApiJson.stats,
-            evolutionChainJson,
-            pokemonApiJson.sprites.other['official-artwork'].front_default,
-        );
+    createPokemon(pokemonName) {
+        return new Pokemon(pokemonName);
     }
 }
 
