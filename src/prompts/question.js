@@ -31,17 +31,28 @@ export const MY_PROMPTS = {
             }
         ]
     },
-    namePrompt: (selectedLanguage) => {
-        // console.log("Selected Language:", selectedLanguage);
-        // console.log(LANGUAGES[selectedLanguage])
-        // const language = LANGUAGES[selectedLanguage];
-        return {
-            type: "input",
-            prefix: "🍙",
-            name: "pokemon",
-            message: LANGUAGES[selectedLanguage].enterPokemonName,
-        }
-    },
+    test: (selectedLanguage) => ({
+        type: "list",
+        prefix: "🍙",
+        name: "mainChoice",
+        message: LANGUAGES[selectedLanguage].PROMPT_ASK_TOPIC,
+        choices: [
+            {
+                name: "Pokemon",
+                value: "pokemon"
+            },
+            {
+                name: "Digimon",
+                value: "digimon"
+            }
+        ]
+    }),
+    namePrompt: (selectedLanguage) => ({
+        type: "input",
+        prefix: "🍙",
+        name: "pokemon",
+        message: LANGUAGES[selectedLanguage].enterPokemonName,
+    }),
     infoPrompt: (selectedLanguage) => ({
         type: "checkbox",
         prefix: "🍙",

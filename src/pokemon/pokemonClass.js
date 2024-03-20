@@ -88,10 +88,16 @@ class Pokemon {
     }
 
     setStats(stats) {
-        this.stats = stats.reduce((statsObject, stat) => {
+        // this.stats = stats.reduce((statsObject, stat) => {
+        //     statsObject[stat.stat.name] = stat.base_stat;
+        //     return statsObject;
+        // }, {});
+
+        const statsObject = {};
+        for (const stat of stats) {
             statsObject[stat.stat.name] = stat.base_stat;
-            return statsObject;
-        }, {});
+        }
+        this.stats = statsObject;
     }
 
     setEvolutionChain(evolutionChain) {
@@ -118,19 +124,40 @@ class Pokemon {
         await this.setArtwork(pokemonJson.sprites.other['official-artwork'].front_default);
     }
 
+    // async serializePokemon(selectedOptions) {
+    //     console.log(selectedOptions);
+    //     if(selectedOptions.includes(intlSingleton.translate("abilities"))){
+    //         await saveToFile(this.abilities, `${this.name}/${intlSingleton.translate("abilities")}.json`);
+    //     }
+    //     if(selectedOptions.includes(intlSingleton.translate("evolution-chain"))){
+    //         await saveToFile(this.evolutionChain, `${this.name}/${intlSingleton.translate("evolution-chain")}.json`);
+    //     }
+    //     if(selectedOptions.includes(intlSingleton.translate("stats"))){
+    //         await saveToFile(this.stats, `${this.name}/${intlSingleton.translate("stats")}.json`);
+    //     }
+    //     if(selectedOptions.includes(intlSingleton.translate("official-artwork"))){
+    //         await saveImage(this.artwork, `${this.name}/${intlSingleton.translate("official-artwork")}.png`);
+    //     }
+    // }
+
     async serializePokemon(selectedOptions) {
-        console.log(selectedOptions);
-        if(selectedOptions.includes(intlSingleton.translate("abilities"))){
-            await saveToFile(this.abilities, `${this.name}/${intlSingleton.translate("abilities")}.json`);
-        }
-        if(selectedOptions.includes(intlSingleton.translate("evolution-chain"))){
-            await saveToFile(this.evolutionChain, `${this.name}/${intlSingleton.translate("evolution-chain")}.json`);
-        }
-        if(selectedOptions.includes(intlSingleton.translate("stats"))){
-            await saveToFile(this.stats, `${this.name}/${intlSingleton.translate("stats")}.json`);
-        }
-        if(selectedOptions.includes(intlSingleton.translate("official-artwork"))){
-            await saveImage(this.artwork, `${this.name}/${intlSingleton.translate("official-artwork")}.png`);
+        const optionsToProperties = {
+            [intlSingleton.translate("abilities")]: { data: this.abilities, ext: '.json' },
+            [intlSingleton.translate("evolution-chain")]: { data: this.evolutionChain, ext: '.json' },
+            [intlSingleton.translate("stats")]: { data: this.stats, ext: '.json' },
+            [intlSingleton.translate("official-artwork")]: { data: this.artwork, ext: '.png', isImage: true }
+        };
+    
+        for (const option of selectedOptions) {
+            const property = optionsToProperties[option];
+            if (property) {
+                const path = `${this.name}/${option}${property.ext}`;
+                if (property.isImage) {
+                    await saveImage(property.data, path);
+                } else {
+                    await saveToFile(property.data, path);
+                }
+            }
         }
     }
 }

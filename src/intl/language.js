@@ -1,5 +1,6 @@
 export const LANGUAGES = {
     en: {
+        'PROMPT_ASK_TOPIC': "What would you like search?",
         welcomeMessage: 'Welcome to the Pokemon Info Downloader CLI!',
         enterPokemonName: 'What pokemon do you want to research?',
         infoPrompt: 'What info do you want to download?',
@@ -14,6 +15,7 @@ export const LANGUAGES = {
         'official-artwork': 'Official Artwork',
     },
     ro: {
+        'PROMPT_ASK_TOPIC': "Ce doriți să căutați?",
         "PROMT_ASK_POKEMON": "",
         "ERRORS_INVALID_POKEMON": "",
         welcomeMessage: 'Bine ați venit la Pokemon Info Downloader CLI!',
@@ -30,6 +32,7 @@ export const LANGUAGES = {
         'official-artwork': 'Designul oficial',
     },
     es: {
+        'PROMPT_ASK_TOPIC': "¿Qué te gustaría buscar?",
         welcomeMessage: 'Bienvenido al Pokemon Info Downloader CLI!',
         enterPokemonName: '¿Qué Pokémon quieres investigar?',
         infoPrompt: '¿Qué información quieres descargar?',
