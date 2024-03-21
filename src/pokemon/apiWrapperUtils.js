@@ -9,3 +9,5 @@ export const getMyPokemon = (pokemonName) => {
 export const getMyPokemonSpecies = (pokemonName) => {
     return fetchEvolutionHelper(`${BASE_URL}/pokemon-species`, pokemonName.toLowerCase());
 }
+
+// si aici sa trec sa harden

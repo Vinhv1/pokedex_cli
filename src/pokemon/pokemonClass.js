@@ -114,6 +114,7 @@ class Pokemon {
         this.artwork = await fetchArtwork(artworkUrl);
     }
 
+    // sa harden code ul asta
     async populatePokemon() {
         const pokemonJson = await getMyPokemon(this.name);
         this.setAbilities(pokemonJson.abilities);
@@ -140,6 +141,8 @@ class Pokemon {
     //     }
     // }
 
+
+    // si aici harden
     async serializePokemon(selectedOptions) {
         const optionsToProperties = {
             [intlSingleton.translate("abilities")]: { data: this.abilities, ext: '.json' },

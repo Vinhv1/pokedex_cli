@@ -15,10 +15,22 @@ ERROR_MESSAGES.set("ERRORS_FETCH_POKEMON", () =>
     intlSingleton.translate("ERRORS_FETCH_POKEMON")
 );
 
-// ERROR_MESSAGES.set("INVALID_EVOLUTION_CHAIN", () => 
-//     intlSingleton.translate("INVALID_EVOLUTION_CHAIN")
-// );
-
 ERROR_MESSAGES.set("ERRORS_FETCH_DIGIMON", () => 
     intlSingleton.translate("ERRORS_FETCH_DIGIMON")
+);
+
+ERROR_MESSAGES.set("ERRORS_INVALID_TOPIC", () => 
+    intlSingleton.translate("ERRORS_INVALID_TOPIC")
+);
+
+ERROR_MESSAGES.set("ERRORS_INVALID_POKEMON", () => 
+    intlSingleton.translate("ERRORS_INVALID_POKEMON")
+);
+
+ERROR_MESSAGES.set("ERRORS_INVALID_POKEMON_INFO", () => 
+    intlSingleton.translate("ERRORS_INVALID_POKEMON_INFO")
+);
+
+ERROR_MESSAGES.set("ERRORS_INVALID_LANGUAGE", () => 
+    intlSingleton.translate("ERRORS_INVALID_LANGUAGE")
 );

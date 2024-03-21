@@ -22,7 +22,7 @@ export async function askTopic () {
     let userInput = await inquirer.prompt(MY_QUESTIONS.askTopicQuestion(intlSingleton.getLanguage()));
     if(typeof userInput !== "object" || typeof userInput.mainChoice !== "string" )
     {
-        throw new Error("InvalidChoice")
+        throw new Error("ERRORS_INVALID_TOPIC")
     }
     return userInput.mainChoice;
 }

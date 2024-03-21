@@ -8,24 +8,23 @@ export async function askForPokemon () {
     let userInput = await inquirer.prompt(MY_POKEMON_QUESTIONS.pokemonNameQuestion(intlSingleton.getLanguage()));
     if(typeof userInput !== "object" || typeof userInput.pokemon !== "string" )
     {
-        throw new Error("INVALID_POKEMON");
+        throw new Error("ERRORS_INVALID_POKEMON");
     }
-    const pokemonName = userInput.pokemon;
-    return pokemonName;
+    return userInput.pokemon;
 }
 
 export async function askInfoToDownload () {
     const userInput = await inquirer.prompt(MY_POKEMON_QUESTIONS.downloadQuestion(intlSingleton.getLanguage()));
     if (!userInput.info_pokemon || userInput.info_pokemon.length === 0) {
-        throw new Error("InvalidInfo");
-    }
-    const info = userInput.info_pokemon;
-    return info;
+        throw new Error("ERRORS_INVALID_INFO");
+      }
+      return userInput.info_pokemon;
 }
 
 export async function askForAnotherPokemon () {
     const userInput = await inquirer.prompt(MY_POKEMON_QUESTIONS.anotherPokemonQuestion(intlSingleton.getLanguage()));
-    let anotherPokemon = userInput.anotherPokemon;
-    return anotherPokemon;
-
+    if (typeof userInput !== "object" || typeof userInput.anotherPokemon !== "string") {
+        throw new Error("ERRORS_INVALID_ANOTHER_POKEMON");
+      }
+    return userInput.anotherPokemon;
 }

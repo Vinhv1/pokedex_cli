@@ -6,6 +6,8 @@ import { getMyPokemonSpecies } from "../pokemon/apiWrapperUtils.js";
 
 // TEMA 1: abstractizarea conceptelor de pokemon din fisierul asta
 
+// harden si aici code ul
+
 // fetchEntity(fromUrl, entityName)
 export async function fetchEntity(fromUrl, entityName, test) {
     const response = await fetch(`${fromUrl}/${entityName}`);

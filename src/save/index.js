@@ -21,6 +21,9 @@ import intlSingleton from "../intl/index.js"
 // }
 
 export async function createFolder(name) {
+    if(!name){
+        throw new Error("ERRORS_INVALID_FOLDER_NAME");
+    }
     const folderName = path.join(process.cwd(), name);
 
     try {
