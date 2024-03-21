@@ -1,13 +1,15 @@
 import { selectLanguage } from "../intl/prompts.js";
 import inquirer from "inquirer";
-import { MY_PROMPTS } from "./question.js";
+import { MY_QUESTIONS } from "./questions/index.js";
 // import { ERROR_MESSAGES } from "./errors.js";
 import intlSingleton from '../intl/index.js';
 
 import * as pokemonPrompts from "./pokemonPrompts.js";
+import * as digimonPrompts from "./digimonPrompts.js";
 
 export const PROMPTS = {
-    pokemon: pokemonPrompts
+    pokemon: pokemonPrompts,
+    digimon: digimonPrompts,
 }
 
 
@@ -17,7 +19,11 @@ export const PROMPTS = {
 // }
 
 export async function askTopic () {
-    const userInput = await inquirer.prompt(MY_PROMPTS.test(intlSingleton.getLanguage()));
+    let userInput = await inquirer.prompt(MY_QUESTIONS.askTopicQuestion(intlSingleton.getLanguage()));
+    if(typeof userInput !== "object" || typeof userInput.mainChoice !== "string" )
+    {
+        throw new Error("InvalidChoice")
+    }
     return userInput.mainChoice;
 }
 

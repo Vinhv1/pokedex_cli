@@ -1,11 +1,11 @@
 import inquirer from "inquirer";
-import { MY_PROMPTS } from "./question.js";
+import { MY_POKEMON_QUESTIONS } from "./questions/pokemonQuestion.js";
 import intlSingleton from '../intl/index.js';
 
 
 
 export async function askForPokemon () {
-    let userInput = await inquirer.prompt(MY_PROMPTS.namePrompt(intlSingleton.getLanguage()));
+    let userInput = await inquirer.prompt(MY_POKEMON_QUESTIONS.pokemonNameQuestion(intlSingleton.getLanguage()));
     if(typeof userInput !== "object" || typeof userInput.pokemon !== "string" )
     {
         throw new Error("INVALID_POKEMON");
@@ -15,7 +15,7 @@ export async function askForPokemon () {
 }
 
 export async function askInfoToDownload () {
-    const userInput = await inquirer.prompt(MY_PROMPTS.infoPrompt(intlSingleton.getLanguage()));
+    const userInput = await inquirer.prompt(MY_POKEMON_QUESTIONS.downloadQuestion(intlSingleton.getLanguage()));
     if (!userInput.info_pokemon || userInput.info_pokemon.length === 0) {
         throw new Error("InvalidInfo");
     }
@@ -24,7 +24,7 @@ export async function askInfoToDownload () {
 }
 
 export async function askForAnotherPokemon () {
-    const userInput = await inquirer.prompt(MY_PROMPTS.anotherPokemonPrompt(intlSingleton.getLanguage()));
+    const userInput = await inquirer.prompt(MY_POKEMON_QUESTIONS.anotherPokemonQuestion(intlSingleton.getLanguage()));
     let anotherPokemon = userInput.anotherPokemon;
     return anotherPokemon;
 
