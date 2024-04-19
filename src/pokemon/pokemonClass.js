@@ -78,6 +78,7 @@ import { saveToFile, saveImage } from "../save/index.js";
 import intlSingleton from "../intl/index.js";
 import { getMyPokemon, getMyPokemonSpecies } from "./apiWrapperUtils.js";
 
+
 class Pokemon {
     constructor(name) {
         this.name = name;
@@ -111,58 +112,60 @@ class Pokemon {
     }
 
     async setArtwork(artworkUrl) {
-        this.artwork = await fetchArtwork(artworkUrl);
+        try{
+            this.artwork = await fetchArtwork(artworkUrl);
+        }catch(err){
+            this.artwork = undefined;
+        }
     }
 
     // sa harden code ul asta
-    async populatePokemon() {
-        const pokemonJson = await getMyPokemon(this.name);
+    async populate() {
+        const [ pokemonJson, evolutionUrl ] = await Promise.all([getMyPokemon(this.name), getMyPokemonSpecies(this.name)]);
         this.setAbilities(pokemonJson.abilities);
         this.setStats(pokemonJson.stats);
-        const evolutionUrl = await getMyPokemonSpecies(this.name);
         const evolutionChainJson = await fetchEvolutionChain(evolutionUrl);
         this.setEvolutionChain(evolutionChainJson);
-        await this.setArtwork(pokemonJson.sprites.other['official-artwork'].front_default);
+        await this.setArtwork(pokemonJson?.sprites?.other['official-artwork']?.front_default);
     }
 
-    // async serializePokemon(selectedOptions) {
-    //     console.log(selectedOptions);
-    //     if(selectedOptions.includes(intlSingleton.translate("abilities"))){
-    //         await saveToFile(this.abilities, `${this.name}/${intlSingleton.translate("abilities")}.json`);
-    //     }
-    //     if(selectedOptions.includes(intlSingleton.translate("evolution-chain"))){
-    //         await saveToFile(this.evolutionChain, `${this.name}/${intlSingleton.translate("evolution-chain")}.json`);
-    //     }
-    //     if(selectedOptions.includes(intlSingleton.translate("stats"))){
-    //         await saveToFile(this.stats, `${this.name}/${intlSingleton.translate("stats")}.json`);
-    //     }
-    //     if(selectedOptions.includes(intlSingleton.translate("official-artwork"))){
-    //         await saveImage(this.artwork, `${this.name}/${intlSingleton.translate("official-artwork")}.png`);
-    //     }
-    // }
+    async serialize(selectedOptions) {
+        if(selectedOptions.includes(intlSingleton.translate("abilities"))){
+            await saveToFile(this.abilities, `${this.name}/${intlSingleton.translate("abilities")}.json`);
+        }
+        if(selectedOptions.includes(intlSingleton.translate("evolution-chain"))){
+            await saveToFile(this.evolutionChain, `${this.name}/${intlSingleton.translate("evolution-chain")}.json`);
+        }
+        if(selectedOptions.includes(intlSingleton.translate("stats"))){
+            await saveToFile(this.stats, `${this.name}/${intlSingleton.translate("stats")}.json`);
+        }
+        if(selectedOptions.includes(intlSingleton.translate("official-artwork"))){
+            await saveImage(this.artwork, `${this.name}/${intlSingleton.translate("official-artwork")}.png`);
+        }
+    }
 
 
     // si aici harden
-    async serializePokemon(selectedOptions) {
-        const optionsToProperties = {
-            [intlSingleton.translate("abilities")]: { data: this.abilities, ext: '.json' },
-            [intlSingleton.translate("evolution-chain")]: { data: this.evolutionChain, ext: '.json' },
-            [intlSingleton.translate("stats")]: { data: this.stats, ext: '.json' },
-            [intlSingleton.translate("official-artwork")]: { data: this.artwork, ext: '.png', isImage: true }
-        };
+    // async serializePokemon(selectedOptions) {
+    //     const optionsToProperties = {
+    //         [intlSingleton.translate("abilities")]: { data: this.abilities, ext: '.json' },
+    //         [intlSingleton.translate("evolution-chain")]: { data: this.evolutionChain, ext: '.json' },
+    //         [intlSingleton.translate("stats")]: { data: this.stats, ext: '.json' },
+    //         [intlSingleton.translate("official-artwork")]: { data: this.artwork, ext: '.png', isImage: true }
+    //     };
     
-        for (const option of selectedOptions) {
-            const property = optionsToProperties[option];
-            if (property) {
-                const path = `${this.name}/${option}${property.ext}`;
-                if (property.isImage) {
-                    await saveImage(property.data, path);
-                } else {
-                    await saveToFile(property.data, path);
-                }
-            }
-        }
-    }
+    //     for (const option of selectedOptions) {
+    //         const property = optionsToProperties[option];
+    //         if (property) {
+    //             const path = `${this.name}/${option}${property.ext}`;
+    //             if (property.isImage) {
+    //                 await saveImage(property.data, path);
+    //             } else {
+    //                 await saveToFile(property.data, path);
+    //             }
+    //         }
+    //     }
+    // }
 }
 
 export default Pokemon;

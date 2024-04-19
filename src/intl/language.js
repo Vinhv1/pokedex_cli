@@ -2,10 +2,10 @@ export const LANGUAGES = {
     en: {
         'PROMPT_ASK_TOPIC': "What would you like search?",
         'PROMPT_WELCOME_MESSAGE': 'Welcome to the Pokemon Info Downloader CLI!',
-        'PROMPT_ASK_POKEMON': 'What pokemon do you want to research?',
+        'PROMPT_ASK_POKEMON': 'What Pokemon do you want to research?',
         'PROMPT_ASK_DOWNLOAD': 'What info do you want to download?',
         'PROMPT_ASK_ANOTHER_POKEMON': 'Do you want to research another pokemon?',
-        'PROMPT_ASK_DIGIMON': 'What digimon do you want to research?',
+        'PROMPT_ASK_DIGIMON': 'What Digimon do you want to research?',
 
         'ERRORS_FETCH_POKEMON': 'Failed to fetch pokemon',
         'ERRORS_FETCH_DIGIMON': 'Failed to fetch digimon',
@@ -18,6 +18,9 @@ export const LANGUAGES = {
         'evolution-chain': 'Evolution Chain',
         'stats': 'Stats',
         'official-artwork': 'Official Artwork',
+        'level': 'Level',
+        'type': 'Type',
+        'attribute': 'Attribute',
     },
     ro: {
         'PROMPT_ASK_TOPIC': "Ce doriți să căutați?",

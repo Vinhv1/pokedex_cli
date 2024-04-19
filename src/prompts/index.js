@@ -1,24 +1,18 @@
-import { selectLanguage } from "../intl/prompts.js";
 import inquirer from "inquirer";
 import { MY_QUESTIONS } from "./questions/index.js";
 // import { ERROR_MESSAGES } from "./errors.js";
 import intlSingleton from '../intl/index.js';
 
-import * as pokemonPrompts from "./pokemonPrompts.js";
-import * as digimonPrompts from "./digimonPrompts.js";
 
-export const PROMPTS = {
-    pokemon: pokemonPrompts,
-    digimon: digimonPrompts,
+export async function selectLanguage() {
+    const userInput = await inquirer.prompt(MY_QUESTIONS.languageSelectionPrompt);
+    if (!userInput) {
+        throw new Error("ERRORS_INVALID_LANGUAGE");
+    }
+    return userInput.selectedLanguage;
 }
 
-
-// export async function selectLanguage() {
-//     const userInput = await inquirer.prompt(MY_PROMPTS.languageSelectionPrompt);
-//     return userInput.selectedLanguage;
-// }
-
-export async function askTopic () {
+export async function askSelectEntity () {
     let userInput = await inquirer.prompt(MY_QUESTIONS.askTopicQuestion(intlSingleton.getLanguage()));
     if(typeof userInput !== "object" || typeof userInput.mainChoice !== "string" )
     {
@@ -27,8 +21,22 @@ export async function askTopic () {
     return userInput.mainChoice;
 }
 
+export async function askForEntityName (selectedEntity) {
+    let userInput = await inquirer.prompt(MY_QUESTIONS.askEntityName(intlSingleton.getLanguage(), selectedEntity));
+    if(typeof userInput !== "object" || typeof userInput.entity !== "string" )
+    {
+        throw new Error("ERRORS_INVALID_ENTITY")
+    }
+    return userInput.entity;
 
-export { selectLanguage }
+}
+
+export async function askForDownloadOptions (selectedEntity) {
+    let userInput = await inquirer.prompt(MY_QUESTIONS.askDownloadOptions(intlSingleton.getLanguage(), selectedEntity));
+    return userInput.downloadOptions;
+
+}
+
 
 // export async function askForPokemon () {
 //     let userInput = await inquirer.prompt(MY_PROMPTS.namePrompt(intlSingleton.getLanguage()));

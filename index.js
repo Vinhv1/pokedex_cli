@@ -1,17 +1,24 @@
-import { PROMPTS, askTopic } from "./src/prompts/index.js";
+import { selectLanguage, askSelectEntity, askForEntityName, askForDownloadOptions } from "./src/prompts/index.js";
 import { createFolder } from "./src/save/index.js";
 
+import Pokemon from "./src/pokemon/pokemonClass.js";
+import Digimon from "./src/digimon/digimonClass.js";
 //Imports for pokemons
 import { getMyPokemon } from "./src/pokemon/apiWrapperUtils.js";
 import pokemonFactory from "./src/pokemon/pokemonFactory.js";
+import digimonFactory from "./src/digimon/digimonFactory.js";
 
 import { handleError } from "./src/errors/index.js";
 // Language imports
-import { selectLanguage } from "./src/prompts/index.js";
 import INTL_SINGLETON from "./src/intl/index.js";
 import { getMyDigimon } from "./src/digimon/apiWrapperUtils.js";
 
 console.log("================ Welcome to the POKEMON DEX CLI ================");
+
+const entityOptions = {
+  pokemon: Pokemon,
+  digimon: Digimon,
+}
 
 async function start() {
   try {
@@ -23,39 +30,92 @@ async function start() {
     INTL_SINGLETON.setLanguage(selectedLanguage);
 
     while (true) {
-      let getChoice = await askTopic();
-      if (!getChoice) {
-        throw new Error("ERRORS_INVALID_TOPIC");
-      }
-      if (getChoice === "pokemon") {
-        const pokemonName = await PROMPTS.pokemon.askForPokemon();
-        if (!pokemonName) {
-          throw new Error("ERRORS_INVALID_POKEMON");
-        }
+      const selectedEntity = await askSelectEntity();
+      const entityClass = entityOptions[selectedEntity];
+      const entityName = await askForEntityName(selectedEntity);
+      const entity = new entityClass(entityName);
+      const selectedOptions = await askForDownloadOptions(selectedEntity);
+      await entity.populate();
+      await createFolder(entityName);
+      await entity.serialize(selectedOptions)
+      // multi selection with Other
+      // top three: pokemon, diginom
+      // hidden options: animals, insects
 
-        const pokemon = pokemonFactory.createPokemon(pokemonName);
-        await pokemon.populatePokemon();
+      // Homework - catch this and restart the function
+      // Unfortunately we don't recognise this family
+      // restart prompt workflow
+      // if (!selectedEntity) {
+      //   throw new Error("ERRORS_INVALID_TOPIC");
+      // }
 
-        const pokemonInfo = await PROMPTS.pokemon.askInfoToDownload();
-        if (!pokemonInfo) {
-          throw new Error("ERRORS_INVALID_POKEMON_INFO");
-        }
+      
+      // if (selectedEntity === "pokemon") {
+      //   const pokemonName = await PROMPTS.pokemon.askForPokemon();
+      //   console.log(pokemonName);
+      //   if (!pokemonName) {
+      //     throw new Error("ERRORS_INVALID_POKEMON");
+      //   }
+      //   const pokemon = pokemonFactory.createPokemon(pokemonName);
+      //   await pokemon.populatePokemon();
 
-        await createFolder(pokemonName);
-        await pokemon.serializePokemon(pokemonInfo);
-        const anotherPokemon = await PROMPTS.pokemon.askForAnotherPokemon();
-        if (anotherPokemon === false) {
-          break;
-        }
-      } else if (getChoice === "digimon") {
-        console.log("digimon soon to come");
-        const digimonName = await PROMPTS.digimon.askForDigimon();
-        const digimon = await getMyDigimon(digimonName);
-      }
+      //   const pokemonInfo = await PROMPTS.pokemon.askInfoToDownload();
+      //   if (!pokemonInfo) {
+      //     throw new Error("ERRORS_INVALID_POKEMON_INFO");
+      //   }
+
+      //   await createFolder(pokemonName);
+      //   await pokemon.serializePokemon(pokemonInfo);
+      //   const anotherPokemon = await PROMPTS.pokemon.askForAnotherPokemon();
+      //   if (anotherPokemon === false) {
+      //     break;
+      //   }
+      // } else if (selectedEntity === "digimon") {
+      //   const digimonName = await PROMPTS.digimon.askForDigimon();
+      //   const digimon = digimonFactory.createDigimon(digimonName);
+      //   await digimon.populateDigimon();
+      //   const digimonInfo = await PROMPTS.digimon.askInfoToDownload();
+      //   console.log("im here")
+      //   await createFolder(digimonName);
+      //   await digimon.serializeDigimon(digimonInfo);
+
+
+      // }
     }
   } catch (error) {
     const errorMessage = handleError(error.message);
     console.error(errorMessage);
+  }
+}
+
+start();
+
+
+
+      // const MY_CHOICES = {
+      //   "pokemon": myPokemonWorkflow
+      // };
+
+      // var smth = MY_CHOICES[getChoice]; 
+
+      // // enter bad party you expose your system to
+      // MY_CHOICES["pokemon"] = function() {
+      //   const badActor = await getRunningPokemonHelper(); // external system
+      //   badActor("make my image pretty");
+
+      //   console.log(this);
+      //   for (keys in this) {
+      //     this[key] = myMalwareFunction();
+      //   }
+      // }
+
+      // smth(); // execute myMalwareFunction();
+
+      // pokemon runtime
+
+
+
+
     //   if (error.message === "Failed to fetch pokemon") {
     //     console.error(INTL_SINGLETON.translate("ERRORS_FETCH_POKEMON"));
     //     continue;
@@ -69,10 +129,8 @@ async function start() {
     // } else {
     //     throw error;
     // }
-  }
-}
 
-start();
+
 
 // doar name parameter in class, ✅
 // hardening the code , error handling and error messages

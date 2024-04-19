@@ -2,6 +2,7 @@ import intlSingleton  from "../intl/index.js";
 
 export function handleError(errorID) {
     const errorMessage = ERROR_MESSAGES.get(errorID);
+    console.log(errorID);
     if (!errorMessage) {
         throw new Error("Unknown error for now! I'll figure it out in a sec");
     }

@@ -41,7 +41,6 @@ export async function createFolder(name) {
 export async function saveToFile(data, filename) {
     const filePath = path.join(process.cwd(), filename);
     const jsonData = JSON.stringify(data, null, 2);
-
     try {
         await fs.writeFile(filePath, jsonData);
     } catch (err) {
@@ -51,10 +50,28 @@ export async function saveToFile(data, filename) {
 
 
 export async function saveImage(imageData, filename) {
-    const filePath = path.join(process.cwd(), filename);
+    // const filePath = path.join(process.cwd(), filename);
+    // const imageNotFound = 
+    // try {
+    //     if(typeof imageData === "undefined"){
+    //         const imageBuffer = await fs.readFile(imageData)
+    //         await fs.writeFile(filePath, imageBuffer)
+    //     }else {
+    //         await fs.writeFile(filePath, imageData);
+    //     }
+    // } catch (err) {
+    //     console.error(`Error writing file ${filePath}`, err);
+    // }
 
+    const filePath = path.join(process.cwd(), filename);
+    const dummyImagePath = path.join(process.cwd(), 'assets/images/no_image_available.png');
     try {
-        await fs.writeFile(filePath, imageData);
+        if(typeof imageData === "undefined"){
+            const imageBuffer = await fs.readFile(dummyImagePath);
+            await fs.writeFile(filePath, imageBuffer)
+        } else {
+            await fs.writeFile(filePath, imageData);
+        }
     } catch (err) {
         console.error(`Error writing file ${filePath}`, err);
     }
